@@ -3,6 +3,7 @@ import ContactItem from "../components/ContactItem";
 import { getContacts } from "../store/actions/contactsActions";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../components/Modal/Modal";
+import Spinner from "../components/Spinner";
 
 const Contacts = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const Contacts = () => {
       <div className="d-flex flex-wrap">
         {toggler && <Modal />}
         {loading && !contacts.length ? (
-          <div>Loading...</div>
+          <Spinner />
         ) : (
           contacts.map(contact => (
             <ContactItem

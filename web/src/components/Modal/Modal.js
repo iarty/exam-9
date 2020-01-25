@@ -9,6 +9,7 @@ import {
   modalHandler
 } from "../../store/actions/contactsActions";
 import { Redirect } from "react-router-dom";
+import Spinner from "../Spinner";
 
 const Modal = () => {
   const { loading, toggler, id, contact } = useSelector(state => state);
@@ -48,7 +49,7 @@ const Modal = () => {
         }}
       >
         {loading ? (
-          <div>Loading...</div>
+          <Spinner />
         ) : (
           <>
             <div className={classes.ModalTitleWrap}>

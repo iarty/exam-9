@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MDBBtn } from "mdbreact";
-import { Redirect } from "react-router-dom";
+import { Redirect, useParams, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { postContacts } from "../store/actions/contactsActions";
+import {
+  editContactData,
+  getContactById,
+  postContacts
+} from "../store/actions/contactsActions";
 
 const ContactForm = () => {
+  const params = useParams();
+  const location = useLocation();
+  const isEdit = location.pathname.includes("edit");
   const [contactData, setContactData] = useState({
     name: "",
     number: "",
@@ -13,7 +20,23 @@ const ContactForm = () => {
   });
   const dispatch = useDispatch();
   const [redirect, setRedirect] = useState(false);
-  const { loading } = useSelector(state => state);
+  const { loading, contact } = useSelector(state => state);
+  const name = isEdit ? "Contacts Editor" : "Contacts Creator";
+  const btnName = isEdit ? "Edit" : "Create";
+
+  useEffect(() => {
+    setContactData({
+      name: "",
+      number: "",
+      email: "",
+      avatarUrl: ""
+    });
+    if (params.id) {
+      dispatch(getContactById(params.id));
+      setContactData({ ...contact });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, params.id]);
 
   const valueChanger = event => {
     setContactData({ ...contactData, [event.target.name]: event.target.value });
@@ -29,13 +52,19 @@ const ContactForm = () => {
     setRedirect(true);
   };
 
+  const editContact = async event => {
+    event.preventDefault();
+    await dispatch(editContactData(params.id, contactData));
+    setRedirect(true);
+  };
+
   if (redirect) {
     return <Redirect to="/" />;
   }
 
   return (
     <form className="ml-auto mr-auto w-50 mt-5 border rounded py-3 px-5">
-      <p className="h4 text-center mb-4">{"Contacts creator"}</p>
+      <p className="h4 text-center mb-4">{name}</p>
       <div className="text-center">
         <img
           src={contactData.avatarUrl}
@@ -105,8 +134,13 @@ const ContactForm = () => {
         >
           <i className="fas fa-arrow-left" /> Back to contacts
         </MDBBtn>
-        <MDBBtn color="indigo" type="submit" size="sm" onClick={postContact}>
-          <i className="fas fa-save" /> Create {loading && <span>loading</span>}
+        <MDBBtn
+          color="indigo"
+          type="submit"
+          size="sm"
+          onClick={isEdit ? editContact : postContact}
+        >
+          <i className={isEdit ? "fas fa-edit" : "fas fa-save"} /> {btnName}
         </MDBBtn>
       </div>
     </form>

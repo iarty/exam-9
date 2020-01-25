@@ -1,7 +1,7 @@
 import axiosContact from "../../axiosContact";
 
 import {
-  DELETE_CONTACT,
+  DELETE_CONTACT, EDIT_CONTACT,
   FETCH_ERROR,
   FETCH_ONE_SUCCESS,
   FETCH_SUCCESS,
@@ -57,6 +57,18 @@ export const deleteContact = id => {
     try {
       await axiosContact.delete(`/contacts/${id}.json`);
       dispatch({ type: DELETE_CONTACT, payload: id });
+    } catch (error) {
+      dispatch({ type: FETCH_ERROR, error });
+    }
+  };
+};
+
+export const editContactData = (id, data) => {
+  return async dispatch => {
+    dispatch({ type: SET_LOADING });
+    try {
+      await axiosContact.patch(`/contacts/${id}.json`, data);
+      dispatch({ type: EDIT_CONTACT, payload: id });
     } catch (error) {
       dispatch({ type: FETCH_ERROR, error });
     }
