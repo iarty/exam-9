@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import ContactItem from "../components/ContactItem";
 import { getContacts } from "../store/actions/contactsActions";
 import { useDispatch, useSelector } from "react-redux";
+import ArtyModal from "../components/ArtyModal";
 
 const Contacts = () => {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ const Contacts = () => {
         </Title>
       </Header>
       <Content style={{ backgroundColor: "#f7f7f7" }}>
+        {<ArtyModal />}
         {!!contacts.length &&
           contacts.map(contact => (
             <ContactItem
