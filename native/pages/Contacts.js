@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   Header,
@@ -11,8 +11,17 @@ import {
 } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import ContactItem from "../components/ContactItem";
+import { getContacts } from "../store/actions/contactsActions";
+import { useDispatch, useSelector } from "react-redux";
 
 const Contacts = () => {
+  const dispatch = useDispatch();
+  const { contacts } = useSelector(state => state);
+
+  useEffect(() => {
+    dispatch(getContacts());
+  }, []);
+
   return (
     <Container>
       <Header>
@@ -22,11 +31,15 @@ const Contacts = () => {
         </Title>
       </Header>
       <Content style={{ backgroundColor: "#f7f7f7" }}>
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
-        <ContactItem />
+        {!!contacts.length &&
+          contacts.map(contact => (
+            <ContactItem
+              key={contact.id}
+              name={contact.name}
+              id={contact.id}
+              imageUrl={contact.avatarUrl}
+            />
+          ))}
       </Content>
       <Footer>
         <FooterTab>
