@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { MDBBtn } from "mdbreact";
 import { Redirect } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { postContacts } from "../store/actions/contactsActions";
 
 const ContactForm = () => {
   const [contactData, setContactData] = useState({
@@ -9,7 +11,9 @@ const ContactForm = () => {
     email: "",
     avatarUrl: ""
   });
+  const dispatch = useDispatch();
   const [redirect, setRedirect] = useState(false);
+  const { loading } = useSelector(state => state);
 
   const valueChanger = event => {
     setContactData({ ...contactData, [event.target.name]: event.target.value });
@@ -17,6 +21,7 @@ const ContactForm = () => {
 
   const postContact = async event => {
     event.preventDefault();
+    await dispatch(postContacts(contactData));
     setRedirect(true);
   };
 
@@ -30,9 +35,13 @@ const ContactForm = () => {
 
   return (
     <form className="ml-auto mr-auto w-50 mt-5 border rounded py-3 px-5">
-      <p className="h4 text-center mb-4">{"Name"}</p>
+      <p className="h4 text-center mb-4">{"Contacts creator"}</p>
       <div className="text-center">
-        <img src="" alt="" style={{ width: 100, height: 100 }} />
+        <img
+          src={contactData.avatarUrl}
+          alt=""
+          style={{ width: 100, height: 100 }}
+        />
       </div>
       <label htmlFor="ContactName" className="grey-text">
         Name
@@ -97,7 +106,7 @@ const ContactForm = () => {
           <i className="fas fa-arrow-left" /> Back to contacts
         </MDBBtn>
         <MDBBtn color="indigo" type="submit" size="sm" onClick={postContact}>
-          <i className="fas fa-save" /> <i className="fas fa-edit" /> Save
+          <i className="fas fa-save" /> Create {loading && <span>loading</span>}
         </MDBBtn>
       </div>
     </form>
