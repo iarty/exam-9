@@ -6,19 +6,18 @@ import Modal from "../components/Modal/Modal";
 
 const Contacts = () => {
   const dispatch = useDispatch();
-  const { contacts, loading } = useSelector(state => state);
+  const { contacts, loading, toggler } = useSelector(state => state);
 
   useEffect(() => {
     dispatch(getContacts());
   }, [dispatch]);
 
-  console.log(contacts);
   return (
     <div>
       <h1>Contacts</h1>
       <hr />
       <div className="d-flex flex-wrap">
-        {<Modal />}
+        {toggler && <Modal />}
         {loading && !contacts.length ? (
           <div>Loading...</div>
         ) : (
@@ -26,9 +25,8 @@ const Contacts = () => {
             <ContactItem
               key={contact.id}
               name={contact.name}
-              number={contact.number}
-              email={contact.email}
               url={contact.avatarUrl}
+              id={contact.id}
             />
           ))
         )}
