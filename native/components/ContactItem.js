@@ -1,11 +1,21 @@
 import React from "react";
 import { TouchableOpacity, Text, Image, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
+import { modalHandler } from "../store/actions/contactsActions";
 
 const ContactItem = ({ name, imageUrl, id }) => {
   const dispatch = useDispatch();
+
+  const handlerModal = () => {
+    dispatch(modalHandler(id));
+  };
+
   return (
-    <TouchableOpacity style={styles.listItem} underlayColor={"#fff"}>
+    <TouchableOpacity
+      style={styles.listItem}
+      underlayColor={"#fff"}
+      onPress={handlerModal}
+    >
       <Image
         style={styles.image}
         source={{
