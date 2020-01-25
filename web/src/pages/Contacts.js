@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import ContactItem from "../components/ContactItem";
 import { getContacts } from "../store/actions/contactsActions";
 import { useDispatch, useSelector } from "react-redux";
+import Modal from "../components/Modal/Modal";
 
 const Contacts = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const Contacts = () => {
       <h1>Contacts</h1>
       <hr />
       <div className="d-flex flex-wrap">
+        {<Modal />}
         {loading && !contacts.length ? (
           <div>Loading...</div>
         ) : (
